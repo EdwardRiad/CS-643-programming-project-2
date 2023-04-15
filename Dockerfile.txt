@@ -1,0 +1,14 @@
+RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py \
+    && python get-pip.py \
+    && pip install pyspark \
+    && mkdir ~/ MyDockerImages
+
+COPY predicting.py ~/ MyDockerImages /
+COPY training.py ~/ MyDockerImages /
+COPY TrainingDataset.csv ~/ MyDockerImages /
+
+WORKDIR ~/ MyDockerImages /
+
+CMD python training.py
+RUN cd ~/cs643
+ENTRYPOINT ["python","predicting.py"]
