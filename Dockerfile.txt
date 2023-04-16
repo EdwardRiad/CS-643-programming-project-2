@@ -1,3 +1,8 @@
+
+FROM datamechanics/spark:3.1-latest
+
+ENV PYSPARK_MAJOR_PYTHON_VERSION=3
+
 RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py \
     && python get-pip.py \
     && pip install pyspark \
@@ -7,8 +12,8 @@ COPY predicting.py ~/ MyDockerImages /
 COPY training.py ~/ MyDockerImages /
 COPY TrainingDataset.csv ~/ MyDockerImages /
 
-WORKDIR ~/ MyDockerImages /
+WORKDIR ~/MyDockerImages/
 
 CMD python training.py
-RUN cd ~/cs643
+RUN cd ~/MyDockerImages
 ENTRYPOINT ["python","predicting.py"]
