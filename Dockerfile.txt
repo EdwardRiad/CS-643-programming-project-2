@@ -1,19 +1,32 @@
-
 FROM datamechanics/spark:3.1-latest
 
 ENV PYSPARK_MAJOR_PYTHON_VERSION=3
 
-RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py \
-    && python get-pip.py \
+RUN pip3 install --upgrade pip --user \
+      
     && pip install pyspark \
-    && mkdir ~/ MyDockerImages
+    && pip install scikit-learn \
 
-COPY predict.py ~/ MyDockerImages /
-COPY training.py ~/ MyDockerImages /
-COPY TrainingDataset.csv ~/ MyDockerImages /
+    && mkdir ~/MyDockerImages \
+    && pip install pandas
+
+ 
+
+RUN DOWNLOAD_URL_SPARK="https://dlcdn.apache.org/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz" \
+    && wget --no-verbose -O apache-spark.tgz  "${DOWNLOAD_URL_SPARK}" \
+    && mkdir -p /home/spark \
+    && tar -xf apache-spark.tgz -C /home/spark --strip-components=1 \
+    && rm apache-spark.tgz
+
+ 
+COPY predict.py ~/MyDockerImages/
+COPY training.py ~/MyDockerImages/
+COPY TrainingDataset.csv ~/MyDockerImages/
+
+
 
 WORKDIR ~/MyDockerImages/
 
 CMD python training.py
 RUN cd ~/MyDockerImages
-ENTRYPOINT ["python","predicting.py"]
+ENTRYPOINT ["python","predict.py"]
