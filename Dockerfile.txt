@@ -8,7 +8,7 @@ RUN curl https://bootstrap.pypa.io/pip/2.7/get-pip.py -o get-pip.py \
     && pip install pyspark \
     && mkdir ~/ MyDockerImages
 
-COPY predicting.py ~/ MyDockerImages /
+COPY predict.py ~/ MyDockerImages /
 COPY training.py ~/ MyDockerImages /
 COPY TrainingDataset.csv ~/ MyDockerImages /
 
