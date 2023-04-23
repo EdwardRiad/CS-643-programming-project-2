@@ -1,27 +1,15 @@
- FROM datamechanics/spark:3.1-latest
-
+FROM datamechanics/spark:3.1-latest
 ENV PYSPARK_MAJOR_PYTHON_VERSION=3
 
-RUN pip3 install --upgrade pip --user \
-      
-    && pip install pyspark \
-    && pip install scikit-learn \
+RUN pip install --upgrade pip --user \
+          && pip install scikit-learn \
+         && pip install pandas \
+         && pip install pyspark
 
-    && mkdir ~/MyDockerImages \
-    && pip install pandas
-
- 
- 
-
- 
+COPY TrainingDataset.csv ~/MyDockerImages/
+COPY ValidationDataset.csv ~/MyDockerImages/ 
 COPY predict.py ~/MyDockerImages/
 COPY training.py ~/MyDockerImages/
-COPY TrainingDataset.csv ~/MyDockerImages/
-
-
-
-WORKDIR ~/MyDockerImages/
 
 CMD python training.py
-RUN cd ~/MyDockerImages
 ENTRYPOINT ["python","predict.py"]
